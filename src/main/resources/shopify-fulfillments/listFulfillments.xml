@@ -83,7 +83,7 @@
 				}
 							
 				if(uriParams != ''){
-					mc.setProperty('uri.var.uriParams' , '?' + uriParams.substring(0, uriParams.length-1));
+					mc.setProperty('uri.var.uriParams' , '?' + uriParams.toString().substring(0, uriParams.toString().lastIndexOf("&")));
 				}
 			]]>
         </script>

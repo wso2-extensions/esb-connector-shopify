@@ -43,7 +43,7 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
 
-        init("shopify-connector-1.0.1-SNAPSHOT");
+        init("shopify-connector-1.0.1");
 
         esbRequestHeadersMap.put("Accept-Charset", "UTF-8");
         esbRequestHeadersMap.put("Content-Type", "application/json");
@@ -649,7 +649,9 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
 
-        Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 404);
+
+        Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 400);
+
         Assert.assertEquals(esbRestResponse.getBody().getString("errors"), apiRestResponse.getBody()
                 .getString("errors"));
 
@@ -676,11 +678,11 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
         Assert.assertEquals(
                 connectorProperties.getProperty("variantId"),
                 apiRestResponse.getBody().getJSONObject("order").getJSONArray("line_items").getJSONObject(0)
-                        .getString("variant_id"));
+                        .get("variant_id").toString());
         Assert.assertEquals(esbRestResponse.getBody().getJSONObject("order").getString("name"), apiRestResponse
-                .getBody().getJSONObject("order").getString("name"));
+                .getBody().getJSONObject("order").get("name").toString());
         Assert.assertEquals(esbRestResponse.getBody().getJSONObject("order").getString("created_at"), apiRestResponse
-                .getBody().getJSONObject("order").getString("created_at"));
+                .getBody().getJSONObject("order").get("created_at").toString());
     }
 
     /**
