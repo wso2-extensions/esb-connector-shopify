@@ -3,7 +3,12 @@
 	"apiUrl":"%s(apiUrl)",
 	"format":"json",
 	"fulfillment": {
-    	 "tracking_number": "%s(trackingNumber)"
+    	 "tracking_number": "%s(trackingNumber)",
+		 "line_items": [
+			 {
+				 "id": "%s(lineItemIdMandatory)"
+			 }
+		 ]
   	},
   	"orderId":"%s(orderId)"
   
