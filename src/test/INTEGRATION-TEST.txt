@@ -3,25 +3,22 @@ Product: Integration tests for WSO2 ESB Shopify connector
 Pre-requisites:
 
  - Maven 3.x
- - Java 1.6 or above
- - The org.wso2.esb.integration.integration-base project is required. The test suite has been configured to download this project automatically.
-   If the automatic download fails, download the following project and compile it using the mvn clean install command to update your local repository:
-   https://github.com/wso2-dev/esb-connectors/tree/master/integration-base
+ - Java 1.8
+
 
 Tested Platform: 
 
- - Microsoft WINDOWS V-7
- - UBUNTU 13.04
- - WSO2 ESB 4.8.1, 4.9.0, 5.0.0-BETA
+ - UBUNTU 16.04
+ - WSO2 EI-6.1.1
 
 Note:
 	Set up a new Shopify account and follow all the instruction given below in step 4 to generate an access token.
 
 Steps to follow in setting integration test.
 
- 1. Download ESB 4.8.1 from official website.
+ 1. Download EI 6.1.1 from official website.
  
- 2. Deploy relevant patches, if applicable and the ESB should be configured as below.
+ 2. Deploy relevant patches, if applicable and the EI should be configured as below.
 	Please make sure that the below mentioned Axis configurations are enabled (\repository\conf\axis2\axis2.xml).
  
 	<messageFormatter contentType="text/html" 
@@ -54,8 +51,8 @@ Steps to follow in setting integration test.
  5. Follow the below mentioned steps for adding valid certificate to access Shopify API over https.
 
 	i) 	 Extract the certificate from browser(Mozilla Firefox) by navigating to https://{shop_name}.myshopify.com
-	ii)  Go to new ESB 4.8.1 folder and place the downloaded certificate in both "<ESB_HOME>/repository/resources/security/" and "{SHOPIFY_CONNECTOR_HOME}/src/test/resources/keystores/products/" folders.
-	iii) Navigate to "<ESB_HOME>/repository/resources/security/" using command prompt and execute keytool -importcert -file CERT_FILE_NAME -keystore client-truststore.jks -alias "CERT_NAME" in command line to import Shopify certificate in to keystore. 
+	ii)  Go to new EI 6.1.1 folder and place the downloaded certificate in both "<EI_HOME>/repository/resources/security/" and "{SHOPIFY_CONNECTOR_HOME}/src/test/resources/keystores/products/" folders.
+	iii) Navigate to "<EI_HOME>/repository/resources/security/" using command prompt and execute keytool -importcert -file CERT_FILE_NAME -keystore client-truststore.jks -alias "CERT_NAME" in command line to import Shopify certificate in to keystore. 
 		 Give "wso2carbon" as password. Press "Y" to complete certificate import process.
 		 
 		 NOTE : CERT_FILE_NAME is the file name which was extracted from Shopify. (e.g. *.Shopify.com)
@@ -67,7 +64,7 @@ Steps to follow in setting integration test.
 		NOTE : CERT_FILE_NAME is the file name which was extracted from Shopify, change it accordingly. (e.g. *.Shopify.com)
 			   CERT_NAME is an arbitrary name for the certificate. (e.g. Shopify)
 
- 6. Compress modified ESB as wso2esb-4.8.1.zip and copy that zip file in to location "{SHOPIFY_CONNECTOR_HOME}/repository/".
+ 6. Compress modified EI as wso2ei-6.1.1 .zip and copy that zip file in to location "{SHOPIFY_CONNECTOR_HOME}/repository/".
 
  7. Update the Shopify properties file at location "{SHOPIFY_CONNECTOR_HOME}/src/test/resources/artifacts/ESB/connector/config" as below.
 	

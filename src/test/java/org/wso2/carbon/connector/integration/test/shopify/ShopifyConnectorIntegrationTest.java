@@ -43,7 +43,9 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
 
-        init("shopify-connector-1.0.2-SNAPSHOT");
+        String connectorName = System.getProperty("connector_name") + "-connector-" +
+                System.getProperty("connector_version") + ".zip";
+        init(connectorName);
 
         esbRequestHeadersMap.put("Accept-Charset", "UTF-8");
         esbRequestHeadersMap.put("Content-Type", "application/json");
@@ -674,6 +676,12 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         String apiEndPoint = connectorProperties.getProperty("apiUrl") + "/admin/orders/" + orderId + ".json";
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
+
+        JSONObject esbLineItem =
+                esbRestResponse.getBody().getJSONObject("order").getJSONArray("line_items").getJSONObject(0);
+
+        String lineItemIdMandatory = esbLineItem.getString("id");
+        connectorProperties.setProperty("lineItemIdMandatory", lineItemIdMandatory);
 
         Assert.assertEquals(
                 connectorProperties.getProperty("variantId"),
