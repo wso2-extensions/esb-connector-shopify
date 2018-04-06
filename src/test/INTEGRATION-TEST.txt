@@ -26,16 +26,6 @@ Steps to follow in setting integration test.
 	<messageBuilder contentType="text/html" 
 				class="org.wso2.carbon.relay.BinaryRelayBuilder"/>
 
-	<messageFormatter contentType=”application/json”
-							  class=”org.apache.synapse.commons.json.JsonStreamFormatter”/>
-	<messageBuilder contentType=”application/json”
-							class=”org.apache.synapse.commons.json.JsonStreamBuilder”/>
-
-	<messageFormatter contentType="application/xml"
-							  class="org.apache.axis2.transport.http.ApplicationXMLFormatter"/>
-	<messageBuilder contentType="application/xml"
-							class="org.apache.axis2.builder.ApplicationXMLBuilder"/> 
-
  3. Create a Shopify account using URL https://app.shopify.com/services/partners/signup by giving required values for relevant fields in the "Shopify Partners" page.
 	
 		Note: This is a full featured 14-day free trial account.
@@ -85,4 +75,4 @@ Steps to follow in setting integration test.
 
 	
  8. Navigate to "{SHOPIFY_CONNECTOR_HOME}" and run the following command.
-      $ mvn clean install
+      $ mvn clean install -Dskip-tests=false
