@@ -3,6 +3,7 @@
 	"apiUrl":"%s(apiUrl)",
 	"format":"json",
 	"fulfillment": {
+		 "location_id": "%s(locationId)",
     	 "tracking_number": "%s(trackingNumber)",
 		 "line_items": [
 			 {

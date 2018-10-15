@@ -43,15 +43,23 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
     @BeforeClass(alwaysRun = true)
     public void setEnvironment() throws Exception {
 
+        addCertificatesToEIKeyStore("client-truststore.jks", "wso2carbon");
+
         String connectorName = System.getProperty("connector_name") + "-connector-" +
                 System.getProperty("connector_version") + ".zip";
         init(connectorName);
+        getApiConfigProperties();
 
         esbRequestHeadersMap.put("Accept-Charset", "UTF-8");
         esbRequestHeadersMap.put("Content-Type", "application/json");
 
         apiRequestHeadersMap.putAll(esbRequestHeadersMap);
         apiRequestHeadersMap.put("X-Shopify-Access-Token", connectorProperties.getProperty("accessToken"));
+
+        connectorProperties.put("customerEmail1", System.currentTimeMillis() +
+                connectorProperties.getProperty("customerEmail1"));
+        connectorProperties.put("customerEmail2", System.currentTimeMillis() +
+                connectorProperties.getProperty("customerEmail2"));
     }
 
     /**
@@ -416,6 +424,10 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
         String esbVariantCreatedAt = esbRestResponse.getBody().getJSONObject("variant").getString("created_at");
         String apiVariantCreatedAt = apiRestResponse.getBody().getJSONObject("variant").getString("created_at");
 
+        String inventoryId = esbRestResponse.getBody().getJSONObject("variant").getString("inventory_item_id");
+
+        connectorProperties.put("inventoryId", inventoryId);
+
         Assert.assertEquals(esbVariantCreatedAt, apiVariantCreatedAt);
 
         String apiVariantTitle = apiRestResponse.getBody().getJSONObject("variant").getString("title");
@@ -747,8 +759,6 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         Assert.assertEquals(esbRestResponse.getBody().getJSONObject("errors").getJSONArray("order").getString(0),
                 apiRestResponse.getBody().getJSONObject("errors").getJSONArray("order").getString(0));
-        Assert.assertEquals(esbRestResponse.getBody().getJSONObject("errors").getJSONArray("line_items").getString(0),
-                apiRestResponse.getBody().getJSONObject("errors").getJSONArray("line_items").getString(0));
     }
 
     /**
@@ -852,6 +862,13 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         esbRequestHeadersMap.put("Action", "urn:createFulfillment");
 
+        String apiInventoryEndPoint =
+                connectorProperties.getProperty("apiUrl") + "/admin/inventory_levels.json?inventory_item_ids="
+                        + connectorProperties.getProperty("inventoryId");
+
+        RestResponse<JSONObject> apiInventoryRestResponse = sendJsonRestRequest(apiInventoryEndPoint, "GET", apiRequestHeadersMap);
+        String locationId = apiInventoryRestResponse.getBody().getJSONArray("inventory_levels").getJSONObject(0).getString("location_id");
+        connectorProperties.put("locationId", locationId);
         RestResponse<JSONObject> esbRestResponse =
                 sendJsonRestRequest(proxyUrl, "POST", esbRequestHeadersMap, "esb_createFulfillment_mandatory.json");
 
@@ -863,7 +880,6 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
                         + ".json";
 
         RestResponse<JSONObject> apiRestResponse = sendJsonRestRequest(apiEndPoint, "GET", apiRequestHeadersMap);
-
         JSONObject apiJsonObject = apiRestResponse.getBody().getJSONObject("fulfillment");
 
         Assert.assertEquals(esbJsonObject.get("id"), apiJsonObject.get("id"));
@@ -922,7 +938,7 @@ public class ShopifyConnectorIntegrationTest extends ConnectorIntegrationTestBas
 
         Assert.assertEquals(esbRestResponse.getHttpStatusCode(), 422);
         Assert.assertEquals(apiRestResponse.getHttpStatusCode(), 422);
-        Assert.assertEquals(esbRestResponse.getBody().get("errors").toString(), apiRestResponse.getBody().get("errors")
+        Assert.assertEquals(esbRestResponse.getBody().get("error").toString(), apiRestResponse.getBody().get("error")
                 .toString());
 
     }
