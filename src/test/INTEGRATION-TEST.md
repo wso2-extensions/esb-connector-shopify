@@ -1,0 +1,59 @@
+##  Integration tests for WSO2 EI Shopify connector
+
+### Pre-requisites:
+
+ - Maven 3.x
+ - Java 1.8
+
+
+### Tested Platform: 
+
+ - UBUNTU 16.04
+ - WSO2 EI-6.4.0
+ - Java 1.8
+ 
+**Note:**
+	Set up a new Shopify account and follow all the instruction given below in step 3 to generate an access token.
+
+### Steps to follow in setting integration test.
+
+ 1. Download EI 6.4.0 from official website and place it in to location "{SHOPIFY_CONNECTOR_HOME}/repository/"..
+ 
+ 2. Create a Shopify account using URL https://app.shopify.com/services/partners/signup by giving required values for relevant fields in the "Shopify Partners" page.
+	
+		Note: This is a full featured 14-day free trial account.
+	
+ 3. Follow the bellow mentioned steps to generate the access token:
+		
+		i)   Create an application on Shopify using your account by navigating to https://app.shopify.com/services/partners/api_clients and you will need to give an application name and callback URL for token requests. 
+		ii)  After successfully creating an application, obtain the API Key(client_id), Credential sets(client_secret) and Callback URL(redirect_uri).
+		iii) Create a developer shop using "development shop" section in left menu panel by giving name(shop_name) for the shop.
+		iv)  Follow the steps in http://docs.shopify.com/api/authentication/oauth#get-the-client-redentials and obtain the API access token that can be used to access the shop’s data as long as the client is installed.
+		Note: At the point of development, we have observed that the request made in Step3 of this document, should send client_id, client_secret and code parameters via form-data, requests send in json format was unsuccessful.
+ 
+ 4. Follow the below mentioned steps for adding valid certificate to access Shopify API over https.
+
+	    i)  Extract the certificate from browser(Mozilla Firefox) by navigating to https://{shop_name}.myshopify.com and place it in to location "{SHOPIFY_CONNECTOR_HOME}/repository/".
+
+ 6. Update the esb-connector-shopify properties file at location "<SHOPIFY_CONNECTOR_HOME>/repository/ with the suited values.
+
+ 7. Following are the properties used in the 'esb-connector-shopify.properties' file and Shopify properties file at location "{SHOPIFY_CONNECTOR_HOME}/src/test/resources/artifacts/ESB/connector/config" to run the integration tests.
+	
+	    i)    apiUrl                    - Use the API URL as "https://{shop_name}.myshopify.com".
+	    ii)   accessToken               - Access Token obtained by following the steps in 4.
+	    iii)  customerFirstName         - Use a valid string value as the first name of the customer.
+	    iv)   customerEmail1            - Use a valid email address. 
+	    v)    customerEmail2            - Use a valid email address.
+	    vi)   productTitle              - Use a valid string as the name of the product.
+	    vii)  productType               - Use a valid string as the type of the product.
+	    viii) vendor                    - Use a valid string as the name of the vendor of the product.
+	    ix)   tags                      - Use a valid string of comma separated string categorizations that a product can be tagged with.
+	    x)    variantOpt1               - Use a valid string as the title of the product variant.
+	    xi)   variantOpt2               - Use a valid string as the title of the product variant.
+	    xii)  trackingNumber            - Use a valid string as the tracking number.
+	
+	Note:-  customerEmail1 and customerEmail2 should be an email which is not associated with an existing customer in your Shopify account.
+
+	
+ 8. Navigate to "{SHOPIFY_CONNECTOR_HOME}" and run the following command.
+      $ mvn clean install -Dskip-tests=false
