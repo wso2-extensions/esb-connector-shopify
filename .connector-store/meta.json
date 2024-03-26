@@ -1,0 +1,12 @@
+{
+    "name": "Shopify",
+    "owner": "WSO2",
+    "category": "E-commerce",
+    "documentationUrl": "https://docs.wso2.com/display/ESBCONNECTORS/Shopify+Connector",
+    "description": "The Shopify connector allows you to access the Shopify REST API through the WSO2 ESB. Shopify is a complete e-Commerce solution that allows the setting up of an online store to sell goods.",
+    "status": "Active",
+    "labels": [
+        "E-commerce"
+    ],
+    "releases": []
+}
