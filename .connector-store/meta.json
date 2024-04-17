@@ -8,5 +8,15 @@
     "labels": [
         "E-commerce"
     ],
-    "releases": []
+    "releases": [
+        {
+            "tagName": "1.0.1",
+            "products": [
+                "EI 6.4.0",
+                "EI 6.3.0",
+                "ESB 5.0.0",
+                "ESB 4.9.0"
+            ]
+        }
+    ]
 }
